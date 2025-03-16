@@ -1,4 +1,5 @@
 const fs = require("fs");
+const { performance } = require("perf_hooks"); // Импортируем модуль для измерения времени
 
 // Функция для создания числового ключа из слова
 function createKey(keyword) {
@@ -75,8 +76,13 @@ function main() {
 
     const message = data.trim(); // Убираем лишние пробелы и переносы строк
 
-    // Шифрование сообщения
+    // Замер времени для шифрования
+    const startEncrypt = performance.now(); // Начало замера
     const encryptedMessage = encrypt(message, key1, key2);
+    const endEncrypt = performance.now(); // Конец замера
+    console.log(`Время шифрования: ${(endEncrypt - startEncrypt).toFixed(3)} мс`);
+
+    // Запись зашифрованного сообщения в файл
     fs.writeFile(encryptedFile, encryptedMessage, (err) => {
       if (err) {
         console.error("Ошибка записи зашифрованного сообщения:", err);
@@ -85,8 +91,13 @@ function main() {
       console.log("Зашифрованное сообщение записано в файл:", encryptedFile);
     });
 
-    // Расшифровка сообщения
+    // Замер времени для расшифровки
+    const startDecrypt = performance.now(); // Начало замера
     const decryptedMessage = decrypt(encryptedMessage, key1, key2);
+    const endDecrypt = performance.now(); // Конец замера
+    console.log(`Время расшифровки: ${(endDecrypt - startDecrypt).toFixed(3)} мс`);
+
+    // Запись расшифрованного сообщения в файл
     fs.writeFile(decryptedFile, decryptedMessage, (err) => {
       if (err) {
         console.error("Ошибка записи расшифрованного сообщения:", err);
